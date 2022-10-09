@@ -1,0 +1,9 @@
+[package]
+name = "chip_8"
+version = "0.1.0"
+edition = "2021"
+authors = ["JxBP"]
+
+[dependencies]
+anyhow = "1.0.65"
+sdl2 = "0.35.2"
