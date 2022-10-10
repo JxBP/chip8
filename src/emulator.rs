@@ -9,31 +9,31 @@ use anyhow::Result;
 pub type Font = [u8; 80];
 
 /// Represents the current state of an [`Emulator`].
-pub struct EmulatorState<'a> {
+pub struct EmulatorState {
     pub ram: Ram,
     pub sound_timer: Timer,
     pub delay_timer: Timer,
     pub frame_buffer: FrameBuffer,
-    pub key_state: &'a mut KeyState,
+    pub key_state: KeyState,
 }
 
 /// A CHIP-8 emulator as a struct bundling all the components required.
-pub struct Emulator<'a, R: Render> {
-    pub state: EmulatorState<'a>,
+pub struct Emulator<R: Render> {
+    pub state: EmulatorState,
     pub cpu: Cpu,
     display: R,
 }
 
-impl<'a, R: Render> Emulator<'a, R> {
+impl<R: Render> Emulator<R> {
     // Creates a new [`Emulator`] with the given [`Render`] and [`KeyState`].
-    pub fn new(display: R, key_state: &'a mut KeyState) -> Emulator<R> {
+    pub fn new(display: R) -> Emulator<R> {
         Self {
             state: EmulatorState {
                 ram: Ram::default(),
                 delay_timer: Timer::default(),
                 sound_timer: Timer::default(),
                 frame_buffer: [[false; 32]; 64],
-                key_state,
+                key_state: [false; 16],
             },
             cpu: Cpu::default(),
             display,

@@ -29,6 +29,9 @@ impl Cpu {
     /// Fetches and executes the next instruction.
     pub fn execute(&mut self, state: &mut EmulatorState) -> Result<()> {
         let instruction = Instruction::parse(state.ram.get(self.pc)?, state.ram.get(self.pc + 1)?);
+
+        // Advance to the next instruction
+        self.pc += 2;
         Ok(())
     }
 }

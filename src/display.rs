@@ -1,6 +1,6 @@
 use sdl2::{pixels::Color, rect::Rect, render::Canvas, video::Window};
 
-const SCALE: u32 = 1;
+const SCALE: u32 = 20;
 
 pub type FrameBuffer = [[bool; 32]; 64];
 
