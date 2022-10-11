@@ -6,4 +6,5 @@ authors = ["JxBP"]
 
 [dependencies]
 anyhow = "1.0.65"
+clap = {version="4.0.13", features=["derive"]}
 sdl2 = "0.35.2"

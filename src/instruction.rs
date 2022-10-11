@@ -6,12 +6,12 @@ pub type U12 = u16;
 /// A CHIP-8 instruction.
 #[derive(Debug, PartialEq, Eq)]
 pub struct Instruction {
-    opcode: U4,
-    x: U4,
-    y: U4,
-    n: U4,
-    nn: u8,
-    nnn: U12,
+    pub opcode: U4,
+    pub x: U4,
+    pub y: U4,
+    pub n: U4,
+    pub nn: u8,
+    pub nnn: U12,
 }
 
 impl Instruction {

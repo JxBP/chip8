@@ -42,8 +42,21 @@ impl<R: Render> Emulator<R> {
 
     /// Loads the given font in the emulated RAM at the offset of 0x50 bytes.
     pub fn load_font(&mut self, font: &Font) -> Result<()> {
-        for (i, byte) in font.iter().enumerate() {
-            self.state.ram.set(0x50 + i, *byte)?;
+        self.load(0x50, font)?;
+        Ok(())
+    }
+
+    /// Loads a ROM into the emulated RAM and jumps the pc to it.
+    pub fn load_rom(&mut self, rom: &[u8]) -> Result<()> {
+        self.load(0x200, rom)?;
+        self.cpu.pc = 0x200;
+        Ok(())
+    }
+
+    /// Copies the data that into the emulated RAM at a given offset.
+    pub fn load(&mut self, offset: usize, data: &[u8]) -> Result<()> {
+        for (i, byte) in data.iter().enumerate() {
+            self.state.ram.set(offset + i, *byte)?;
         }
         Ok(())
     }

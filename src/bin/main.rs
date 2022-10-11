@@ -1,6 +1,7 @@
-use std::time::Duration;
+use std::{fs::File, io::Read, time::Duration};
 
-use chip_8::{cpu::KeyState, display::SDLRenderer, emulator::Emulator};
+use chip_8::{cpu::KeyState, display::SDLRenderer, emulator::Emulator, ram::RAM_SIZE};
+use clap::{command, Parser};
 use sdl2::{event::Event, keyboard::Keycode};
 
 const FONT: [u8; 80] = [
@@ -22,7 +23,20 @@ const FONT: [u8; 80] = [
     0xF0, 0x80, 0xF0, 0x80, 0x80, // F
 ];
 
+#[derive(Parser)]
+#[command(author, version, about = "A CHIP-8 emulator")]
+struct Cli {
+    /// The ROM file to run
+    rom_file: String,
+}
+
 fn main() -> anyhow::Result<()> {
+    let cli = Cli::parse();
+
+    // Arbitrary value really. I don't know how big ROMs for CHIP-8 usually are.
+    let mut rom = Vec::with_capacity(RAM_SIZE / 2);
+    File::open(cli.rom_file)?.read_to_end(&mut rom)?;
+
     let sdl2_ctx = sdl2::init().map_err(anyhow::Error::msg)?;
     let mut event_pump = sdl2_ctx.event_pump().map_err(anyhow::Error::msg)?;
 
@@ -30,6 +44,8 @@ fn main() -> anyhow::Result<()> {
 
     let mut emulator = Emulator::new(display);
     emulator.load_font(&FONT)?;
+    // TODO: Remove this unnecessary copy and make the emulator directly load from the file.
+    emulator.load_rom(rom.as_mut())?;
 
     'running: loop {
         emulator.step()?;

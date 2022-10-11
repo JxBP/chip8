@@ -1,6 +1,6 @@
 use anyhow::{bail, Result};
 
-const RAM_SIZE: usize = 4096;
+pub const RAM_SIZE: usize = 4096;
 
 /// Ram is a safe wrapper to access an array serving as memory for the emulator.
 /// Addresses are checked for validity to prevent panics when indexing the array

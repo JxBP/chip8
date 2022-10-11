@@ -30,6 +30,7 @@ impl Render for SDLRenderer {
         self.0.set_draw_color(Color::BLACK);
         self.0.clear();
 
+        self.0.set_draw_color(Color::WHITE);
         for (x, col) in frame_buffer.iter().enumerate() {
             for (y, state) in col.iter().enumerate() {
                 // If this is true we shall render the pixel white
