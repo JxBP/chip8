@@ -1,9 +1,8 @@
-⚠️  This project is not finished.
+# CHIP-8 Emulator
+An emulator for CHIP-8. See `main.rs` for the key mappings.
+Tested using [this](https://github.com/Timendus/chip8-test-suite) rom.
 
-# Chip8 Emulator
-An emulator for CHIP-8.
-
-Made with the help of [this](https://tobiasvl.github.io/blog/write-a-chip-8-emulator/) guide.
+Thanks to [this](https://tobiasvl.github.io/blog/write-a-chip-8-emulator/) guide for an explanation of how the CHIP-8 works.
 
 # License
 This project is dual-licensed under either of
