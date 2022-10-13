@@ -7,4 +7,5 @@ authors = ["JxBP"]
 [dependencies]
 anyhow = "1.0.65"
 clap = {version="4.0.13", features=["derive"]}
+rand = "0.8.5"
 sdl2 = "0.35.2"

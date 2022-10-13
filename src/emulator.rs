@@ -6,6 +6,7 @@ use crate::{
 };
 use anyhow::Result;
 
+pub const FONT_OFFSET: usize = 0x50;
 pub type Font = [u8; 80];
 
 /// Represents the current state of an [`Emulator`].
@@ -42,7 +43,7 @@ impl<R: Render> Emulator<R> {
 
     /// Loads the given font in the emulated RAM at the offset of 0x50 bytes.
     pub fn load_font(&mut self, font: &Font) -> Result<()> {
-        self.load(0x50, font)?;
+        self.load(FONT_OFFSET, font)?;
         Ok(())
     }
 

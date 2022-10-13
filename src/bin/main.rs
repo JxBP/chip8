@@ -48,7 +48,6 @@ fn main() -> anyhow::Result<()> {
     emulator.load_rom(rom.as_mut())?;
 
     'running: loop {
-        emulator.step()?;
         for event in event_pump.poll_iter() {
             match event {
                 Event::Quit { .. }
@@ -69,6 +68,7 @@ fn main() -> anyhow::Result<()> {
                 _ => {}
             }
         }
+        emulator.step()?;
         ::std::thread::sleep(Duration::new(0, 1_000_000_000u32 / 60));
     }
 
