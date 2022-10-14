@@ -108,19 +108,19 @@ impl Cpu {
             (0x8, _, _, 0x4) => {
                 let (result, did_overflow) = vx.overflowing_add(vy);
                 self.set_register(instruction.x, result)?;
-                self.set_register(0xF, if did_overflow { 1 } else { 0 })?;
+                self.set_carry_flag(did_overflow);
             }
             // Set VX to VX - VY (overflow -> carryflag)
             (0x8, _, _, 0x5) => {
                 let (result, did_overflow) = vx.overflowing_sub(vy);
                 self.set_register(instruction.x, result)?;
-                self.set_register(0xF, if did_overflow { 0 } else { 1 })?;
+                self.set_carry_flag(!did_overflow);
             }
             // Set VX to VY - VX (overflow -> carryflag)
             (0x8, _, _, 0x7) => {
                 let (result, did_overflow) = vy.overflowing_sub(vx);
                 self.set_register(instruction.x, result)?;
-                self.set_register(0xF, if did_overflow { 0 } else { 1 })?;
+                self.set_carry_flag(!did_overflow);
             }
             // TODO: Make old vs. new behaviour configurable
             // Here we are using the new behaviour
@@ -251,6 +251,10 @@ impl Cpu {
     pub fn get_register(&self, register: u8) -> Result<u8> {
         is_valid_register(register)?;
         Ok(self.registers[register as usize])
+    }
+
+    pub fn set_carry_flag(&mut self, flag: bool) {
+        self.registers[0xF] = if flag { 1 } else { 0 };
     }
 }
 
