@@ -116,11 +116,11 @@ impl Cpu {
                 self.set_register(instruction.x, result)?;
                 self.set_register(0xF, if did_overflow { 0 } else { 1 })?;
             }
-            // Set VY to VY - VX (overflow -> carryflag)
+            // Set VX to VY - VX (overflow -> carryflag)
             (0x8, _, _, 0x7) => {
                 let (result, did_overflow) = vy.overflowing_sub(vx);
                 self.set_register(instruction.x, result)?;
-                self.set_register(0xF, if did_overflow { 1 } else { 0 })?;
+                self.set_register(0xF, if did_overflow { 0 } else { 1 })?;
             }
             // TODO: Make old vs. new behaviour configurable
             // Here we are using the new behaviour
