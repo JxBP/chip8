@@ -114,7 +114,7 @@ impl Cpu {
             (0x8, _, _, 0x5) => {
                 let (result, did_overflow) = vx.overflowing_sub(vy);
                 self.set_register(instruction.x, result)?;
-                self.set_register(0xF, if did_overflow { 1 } else { 0 })?;
+                self.set_register(0xF, if did_overflow { 0 } else { 1 })?;
             }
             // Set VY to VY - VX (overflow -> carryflag)
             (0x8, _, _, 0x7) => {
