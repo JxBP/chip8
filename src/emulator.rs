@@ -23,11 +23,16 @@ pub struct Emulator<R: Render> {
     pub state: EmulatorState,
     pub cpu: Cpu,
     display: R,
+    // The amount of cpu cycles since the last timer decrement
+    ticks: u32,
+    // How many cpu cycles there should be between every timer decrement
+    timer_freq: u32,
 }
 
 impl<R: Render> Emulator<R> {
-    // Creates a new [`Emulator`] with the given [`Render`] and [`KeyState`].
-    pub fn new(display: R) -> Emulator<R> {
+    /// Creates a new [`Emulator`] with the given [`Render`].
+    /// `cycles` should be how often the step function is invoked per second.
+    pub fn new(display: R, cycles: u32) -> Emulator<R> {
         Self {
             state: EmulatorState {
                 ram: Ram::default(),
@@ -38,6 +43,8 @@ impl<R: Render> Emulator<R> {
             },
             cpu: Cpu::default(),
             display,
+            ticks: 0,
+            timer_freq: cycles / 60,
         }
     }
 
@@ -62,13 +69,18 @@ impl<R: Render> Emulator<R> {
         Ok(())
     }
 
-    /// Executes the next instruction, updates sound and delay timer as well as redrawing the
-    /// screen.
+    /// Executes the next instruction and redraws the screen.
+    /// An internal counter is kept that decrements the timers every 8th call
+    /// of this function.
     pub fn step(&mut self) -> Result<()> {
         self.cpu.execute(&mut self.state)?;
         self.display.draw(self.state.frame_buffer)?;
-        self.state.sound_timer.decrement();
-        self.state.delay_timer.decrement();
+        self.ticks += 1;
+        if self.ticks >= self.timer_freq {
+            self.state.sound_timer.decrement();
+            self.state.delay_timer.decrement();
+            self.ticks = 0;
+        }
         Ok(())
     }
 }

@@ -28,6 +28,10 @@ const FONT: [u8; 80] = [
 struct Cli {
     /// The ROM file to run
     rom_file: String,
+
+    /// How many cpu cycles per second
+    #[arg(short, long, default_value_t = 500)]
+    cycles: u32,
 }
 
 fn main() -> anyhow::Result<()> {
@@ -42,7 +46,7 @@ fn main() -> anyhow::Result<()> {
 
     let display = SDLRenderer::new(&sdl2_ctx);
 
-    let mut emulator = Emulator::new(display);
+    let mut emulator = Emulator::new(display, cli.cycles);
     emulator.load_font(&FONT)?;
     // TODO: Remove this unnecessary copy and make the emulator directly load from the file.
     emulator.load_rom(rom.as_mut())?;
@@ -69,7 +73,7 @@ fn main() -> anyhow::Result<()> {
             }
         }
         emulator.step()?;
-        ::std::thread::sleep(Duration::new(0, 1_000_000_000u32 / 60));
+        ::std::thread::sleep(Duration::new(0, 1_000_000_000u32 / cli.cycles));
     }
 
     Ok(())
